@@ -1,3 +1,3 @@
-# [NFTz](https://nftz.hotgarba.ge)
+# NFTz
 
-lol
+[lol](https://nftz.hotgarba.ge)
