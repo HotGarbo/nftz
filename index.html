@@ -1,51 +1,57 @@
+<!DOCTYPE html>
+
 <head>
   <meta name="viewport" content="width=device-width, user-scalable=no" />
   <style>
     body {
       margin: 0;
+      display: flex;
+      flex-wrap: wrap;
     }
 
     img.soyjaks {
-      position: fixed;
-      bottom: 0;
+      width: 100%;
+      position: absolute;
       left: 0;
-      width: 100vw;
-      height: 100vh;
-      height: 100svh;
-      object-fit: fill;
+      bottom: 0;
       pointer-events: none;
     }
-      
-    img.nft {
+
+    .nft {
+      position: relative;
       width: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333vw;
       max-width: 33.3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333%;
-      height: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333vh;
-      height: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333svh;
+      height: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333vw;
+    }
+
+    .og {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
     }
 
     @media (min-width: 768px) {
-      img.nft {
+      .nft {
         width: 25vw;
-	max-width: 25%;
-        height: 25vh;
-        height: 25svh;
+        max-width: 25%;
+        height: 25vw;
       }
     }
 
     @media (min-width: 1024px) {
-      img.nft {
+      .nft {
         width: 20vw;
-	max-width: 20%;
-        height: 20vh;
-        height: 20svh;
+        max-width: 20%;
+        height: 20vw;
       }
     }
   </style>
 </head>
-<img src="soyjakspointingtransparent.png" class="soyjaks">
 <script>
   let junk = {};
+  let soyjaks = new Image();
+  soyjaks.src = "soyjakspointingtransparent.png";
+  soyjaks.className = "soyjaks";
   loadem(0);
   function loadem(offset) {
     fetch('https://api.opensea.io/api/v1/bundles?limit=50&offset=' + offset)
@@ -56,11 +62,18 @@
             if (!a.image_url || junk[a.collection.slug]) {
               return;
             }
+            let div = document.createElement('div');
+            div.className = "nft";
+            let sj = soyjaks.cloneNode(false);
             let img = new Image();
             img.loading = "lazy";
-            img.className = "nft";
+            img.className = "og";
+            img.addEventListener('loadstart', evt => {
+              div.appendChild(sj);
+            })
             img.src = a.image_url;
-            document.body.appendChild(img);
+            div.appendChild(img);
+            document.body.appendChild(div);
             junk[a.collection.slug] = true;
           });
         });
