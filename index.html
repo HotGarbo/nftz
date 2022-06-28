@@ -5,8 +5,20 @@
       margin: 0;
     }
 
+    img.soyjaks {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100svh;
+      object-fit: fill;
+      pointer-events: none;
+    }
+      
     img.nft {
       width: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333vw;
+      max-width: 33.3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333%;
       height: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333vh;
       height: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333svh;
       object-fit: cover;
@@ -15,6 +27,7 @@
     @media (min-width: 768px) {
       img.nft {
         width: 25vw;
+	max-width: 25%;
         height: 25vh;
         height: 25svh;
       }
@@ -23,14 +36,14 @@
     @media (min-width: 1024px) {
       img.nft {
         width: 20vw;
+	max-width: 20%;
         height: 20vh;
         height: 20svh;
       }
     }
   </style>
 </head>
-<img src="soyjakspointingtransparent.png"
-  style="position: fixed;bottom: 0;right: 0;width: 100vw;height: 100vh;height: 100svh;object-fit: fill;">
+<img src="soyjakspointingtransparent.png" class="soyjaks">
 <script>
   let junk = {};
   loadem(0);
