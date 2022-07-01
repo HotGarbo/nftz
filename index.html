@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <head>
+  <title>lol NFTs</title>
   <meta name="viewport" content="width=device-width, user-scalable=no" />
   <style>
     body {
@@ -9,12 +10,98 @@
       flex-wrap: wrap;
     }
 
-    img.soyjaks {
+    .soyjak {
       width: 100%;
+      height: 100%;
       position: absolute;
       left: 0;
       bottom: 0;
       pointer-events: none;
+      background-size: 50%;
+      background-position-y: 100%;
+      background-repeat: no-repeat;
+    }
+
+    .nft.boredjak > .soyjak {
+      background-image: url("soyjaks/boredjak.png");
+      background-size: 60%;
+    }
+
+    .nft.brainlet > .soyjak {
+      background-image: url("soyjaks/brainlet.png");
+    }
+
+    .nft.droolet > .soyjak {
+      background-image: url("soyjaks/droolet.png");
+    }
+
+    .nft.et > .soyjak {
+      background-image: url("soyjaks/et.png");
+    }
+
+    .nft.gabagool > .soyjak {
+      background-image: url("soyjaks/gabagool.png");
+    }
+
+    .nft.gape > .soyjak {
+      background-image: url("soyjaks/gape.png");
+      background-position-x: 100%;
+    }
+
+    .nft.headlet > .soyjak {
+      background-image: url("soyjaks/headlet.png");
+    }
+
+    .nft.leaning > .soyjak {
+      background-image: url("soyjaks/leaning.png");
+    }
+
+    .nft.ogsoyjak > .soyjak {
+      background-image: url("soyjaks/ogsoyjak.png");
+    }
+
+    .nft.perrojak > .soyjak {
+      background-image: url("soyjaks/perrojak.png");
+      background-position-x: 100%;
+      background-size: 66.6%;
+    }
+
+    .nft.phone > .soyjak {
+      background-image: url("soyjaks/phone.png");
+      background-size: 100% 100%;
+    }
+    .nft.phone > .og {
+      width: 50%;
+    }
+
+    .nft.pointing > .soyjak {
+      background-image: url("soyjaks/pointing.png");
+      background-size: contain;
+    }
+
+    .nft.slowburn > .soyjak {
+      background-image: url("soyjaks/slowburn.png");
+      background-size: 66.6%;
+    }
+
+    .nft.trio > .soyjak {
+      background-image: url("soyjaks/trio.png");
+      background-size: contain;
+    }
+
+    .nft.wholesome > .soyjak {
+      background-image: url("soyjaks/wholesome.png");
+      background-position-x: 100%;
+    }
+
+    .nft.widesmile > .soyjak {
+      background-image: url("soyjaks/widesmile.png");
+    }
+
+    .og {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .nft {
@@ -22,12 +109,6 @@
       width: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333vw;
       max-width: 33.3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333%;
       height: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333vw;
-    }
-
-    .og {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
     }
 
     @media (min-width: 768px) {
@@ -45,13 +126,13 @@
         height: 20vw;
       }
     }
+
   </style>
 </head>
 <script>
-  let junk = {};
-  let soyjaks = new Image();
-  soyjaks.src = "soyjakspointingtransparent.png";
-  soyjaks.className = "soyjaks";
+  const jakClasses = ["boredjak", "brainlet", "droolet", "et", "gabagool", "gape", "headlet", 
+    "leaning", "ogsoyjak", "perrojak", "phone", "pointing", "slowburn", "trio", "wholesome", "widesmile"];
+  let oldHat = {};
   loadem(0);
   function loadem(offset) {
     fetch('https://api.opensea.io/api/v1/bundles?limit=50&offset=' + offset)
@@ -59,22 +140,24 @@
       .then(j => {
         j.bundles.forEach(b => {
           b.assets.forEach(a => {
-            if (!a.image_url || junk[a.collection.slug]) {
+            if (!a.image_url || oldHat[a.collection.slug]) {
               return;
             }
             let div = document.createElement('div');
             div.className = "nft";
-            let sj = soyjaks.cloneNode(false);
+            div.classList.add(jakClasses[Math.floor(Math.random() * jakClasses.length)]);
             let img = new Image();
             img.loading = "lazy";
             img.className = "og";
-            img.addEventListener('loadstart', evt => {
+            img.addEventListener('load', evt => {
+              let sj = document.createElement('div');
+              sj.className = "soyjak";
               div.appendChild(sj);
             })
             img.src = a.image_url;
             div.appendChild(img);
             document.body.appendChild(div);
-            junk[a.collection.slug] = true;
+            oldHat[a.collection.slug] = true;
           });
         });
         loadem(offset + 50);
