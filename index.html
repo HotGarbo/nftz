@@ -11,94 +11,27 @@
     }
 
     .soyjak {
-      width: 100%;
-      height: 100%;
+      width: 66.6%;
+      height: 66.6%;
       position: absolute;
       left: 0;
       bottom: 0;
+      object-fit: contain;
+      object-position: bottom left;
       pointer-events: none;
-      background-size: 50%;
-      background-position-y: 100%;
-      background-repeat: no-repeat;
-    }
-
-    .nft.boredjak > .soyjak {
-      background-image: url("soyjaks/boredjak.png");
-      background-size: 60%;
-    }
-
-    .nft.brainlet > .soyjak {
-      background-image: url("soyjaks/brainlet.png");
-    }
-
-    .nft.droolet > .soyjak {
-      background-image: url("soyjaks/droolet.png");
-    }
-
-    .nft.et > .soyjak {
-      background-image: url("soyjaks/et.png");
-    }
-
-    .nft.gabagool > .soyjak {
-      background-image: url("soyjaks/gabagool.png");
-    }
-
-    .nft.gape > .soyjak {
-      background-image: url("soyjaks/gape.png");
-      background-position-x: 100%;
-    }
-
-    .nft.headlet > .soyjak {
-      background-image: url("soyjaks/headlet.png");
-    }
-
-    .nft.leaning > .soyjak {
-      background-image: url("soyjaks/leaning.png");
-    }
-
-    .nft.ogsoyjak > .soyjak {
-      background-image: url("soyjaks/ogsoyjak.png");
-    }
-
-    .nft.perrojak > .soyjak {
-      background-image: url("soyjaks/perrojak.png");
-      background-position-x: 100%;
-      background-size: 66.6%;
-    }
-
-    .nft.phone > .soyjak {
-      background-image: url("soyjaks/phone.png");
-      background-size: 100% 100%;
-    }
-    .nft.phone > .og {
-      width: 50%;
-    }
-
-    .nft.pointing > .soyjak {
-      background-image: url("soyjaks/pointing.png");
-      background-size: contain;
-    }
-
-    .nft.slowburn > .soyjak {
-      background-image: url("soyjaks/slowburn.png");
-      background-size: 66.6%;
-    }
-
-    .nft.trio > .soyjak {
-      background-image: url("soyjaks/trio.png");
-      background-size: contain;
-    }
-
-    .nft.wholesome > .soyjak {
-      background-image: url("soyjaks/wholesome.png");
-      background-position-x: 100%;
-    }
-
-    .nft.widesmile > .soyjak {
-      background-image: url("soyjaks/widesmile.png");
     }
 
     .og {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .right-click-save-as {
+      position: absolute;
+      left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -126,14 +59,32 @@
         height: 20vw;
       }
     }
-
   </style>
 </head>
 <script>
-  const jakClasses = ["boredjak", "brainlet", "droolet", "et", "gabagool", "gape", "headlet", 
-    "leaning", "ogsoyjak", "perrojak", "phone", "pointing", "slowburn", "trio", "wholesome", "widesmile"];
+  const soyjaks = [
+    { "src": "soyjaks/boredjak.png" },
+    { "src": "soyjaks/brainlet.png" },
+    { "src": "soyjaks/droolet.png" },
+    { "src": "soyjaks/et.png" },
+    { "src": "soyjaks/gabagool.png" },
+    { "src": "soyjaks/gape.png", "left": "auto", "right": 0, "object-position": "bottom right" },
+    { "src": "soyjaks/headlet.png" },
+    { "src": "soyjaks/leaning.png" },
+    { "src": "soyjaks/ogsoyjak.png" },
+    { "src": "soyjaks/perrojak.png", "left": "auto", "right": 0, "object-position": "bottom right" },
+    { "src": "soyjaks/phone.png", "width": "100%", "height": "100%", "object-fit": "fill" },
+    { "src": "soyjaks/pointing.png", "width": "100%", "height": "100%" },
+    { "src": "soyjaks/slowburn.png" },
+    { "src": "soyjaks/trio.png", "width": "100%", "height": "100%" },
+    { "src": "soyjaks/wholesome.png", "left": "auto", "right": 0, "object-position": "bottom right" },
+    { "src": "soyjaks/widesmile.png" },
+  ];
+  fisherYeets(soyjaks);
+  let i = 0;
   let oldHat = {};
   loadem(0);
+
   function loadem(offset) {
     fetch('https://api.opensea.io/api/v1/bundles?limit=50&offset=' + offset)
       .then(r => r.json())
@@ -143,24 +94,100 @@
             if (!a.image_url || oldHat[a.collection.slug]) {
               return;
             }
-            let div = document.createElement('div');
-            div.className = "nft";
-            div.classList.add(jakClasses[Math.floor(Math.random() * jakClasses.length)]);
-            let img = new Image();
-            img.loading = "lazy";
-            img.className = "og";
-            img.addEventListener('load', evt => {
-              let sj = document.createElement('div');
-              sj.className = "soyjak";
-              div.appendChild(sj);
+            let nft = document.createElement('div');
+            nft.className = "nft";
+            let og = new Image();
+            og.loading = "lazy";
+            og.className = "og";
+            let sj = soyjakit(soyjaks[i]);
+            let sjSrc = soyjaks[i].src;
+            i++;
+            if (i >= soyjaks.length) {
+              fisherYeets(soyjaks);
+              i = 0;
+            }
+            og.addEventListener('load', evt => {
+              let canvas = document.createElement('canvas');
+              let ctx = canvas.getContext('2d');
+              canvas.width = og.naturalWidth;
+              canvas.height = og.naturalHeight;
+              canvas.className = "right-click-save-as";
+              if (sj.style.objectFit == "fill") { // Phonejak
+                og.style.width = "50%";
+                ctx.drawImage(og,
+                  // sx, sy, sw, sh
+                  og.naturalWidth / 4, 0, og.naturalWidth / 2, og.naturalHeight,
+                  // dx, dy, dw, dh
+                  0, 0, og.naturalWidth / 2, og.naturalHeight);
+              } else {
+                ctx.drawImage(og, 0, 0);
+              }
+              sj.addEventListener('load', evt => {
+                nft.appendChild(sj);
+                let left = sj.offsetLeft / nft.offsetWidth * canvas.width;
+                let top = sj.offsetTop / nft.offsetHeight * canvas.height;
+                let widthRatio = sj.offsetWidth / nft.offsetWidth;
+                let heightRatio = sj.offsetHeight / nft.offsetHeight;
+                if (sj.style.objectFit === "fill") { // Full cover phonejak
+                  ctx.drawImage(sj, 0, 0, canvas.width, canvas.height);
+                } else {
+                  drawFitImage(ctx, sj, left, top, widthRatio * canvas.width, heightRatio * canvas.height,
+                    {objectFit: 'contain', offsetX: sj.style.objectPosition === 'bottom right' ? 1 : 0, offsetY: 1});
+                }
+                nft.prepend(canvas);
+              });
+              sj.src = sjSrc;
             })
-            img.src = a.image_url;
-            div.appendChild(img);
-            document.body.appendChild(div);
+            og.src = a.image_url;
+            nft.appendChild(og);
+            document.body.appendChild(nft);
             oldHat[a.collection.slug] = true;
           });
         });
-        loadem(offset + 50);
+        if (offset < 100) loadem(offset + 50);
       });
   }
+
+  function fisherYeets(arr) {
+    let i = arr.length;
+    while (i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      let tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+    }
+  }
+
+  function soyjakit(sj) {
+    let img = new Image();
+    img.className = "soyjak";
+    Object.keys(sj).forEach(k => img.style[k] = sj[k]);
+    return img;
+  }
+
+  // Ripped off from https://github.com/mgcrea/js-canvas-object-fit/blob/master/src/index.js
+  drawFitImage = (
+    ctx,
+    image,
+    x,
+    y,
+    width,
+    height,
+    { objectFit = 'none', offsetX = 1 / 2, offsetY = 1 / 2 } = {}
+  ) => {
+    const imageWidth = image.naturalWidth;
+    const imageHeight = image.naturalHeight;
+    // Resize values
+    let resizeRatio = Math[objectFit === 'cover' ? 'max' : 'min'](width / imageWidth, height / imageHeight);
+    const resizeWidth = imageWidth * resizeRatio;
+    const resizeHeight = imageHeight * resizeRatio;
+    console.log(image.src, imageWidth, imageHeight, resizeRatio, resizeWidth, resizeHeight);
+    // Cropping values
+    const sWidth = imageWidth / (resizeWidth / width);
+    const sHeight = imageHeight / (resizeHeight / height);
+    const sX = (imageWidth - sWidth) * offsetX;
+    const sY = (imageHeight - sHeight) * offsetY;
+    // Draw image
+    ctx.drawImage(image, sX, sY, sWidth, sHeight, x, y, width, height);
+  };
 </script>
