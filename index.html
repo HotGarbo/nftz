@@ -3,7 +3,8 @@
 <head>
   <title>lol NFTs</title>
   <meta name="viewport" content="width=device-width, user-scalable=no" />
-  <meta name="description" content="You think it's funny to take screenshots of people's NFTS, huh? Property theft is a joke to you? l'll have you know that the blockchain doesn't lie. I own it. Even if you save it, it's my property. You are mad that you don't own the art that I own. Delete this." />
+  <meta name="description"
+    content="You think it's funny to take screenshots of people's NFTS, huh? Property theft is a joke to you? l'll have you know that the blockchain doesn't lie. I own it. Even if you save it, it's my property. You are mad that you don't own the art that I own. Delete this." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="/soyjaks/boredjak.png">
   <meta property="og:url" content="https://nftz.hotgarba.ge">
@@ -24,6 +25,8 @@
       object-fit: contain;
       object-position: bottom left;
       pointer-events: none;
+      touch-action: none;
+      -webkit-user-select: none;
     }
 
     .og {
@@ -32,6 +35,8 @@
       height: 100%;
       object-fit: cover;
       pointer-events: none;
+      touch-action: none;
+      -webkit-user-select: none;
     }
 
     .right-click-save-as {
@@ -39,7 +44,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      opacity: 0;
     }
 
     .nft {
@@ -116,7 +121,6 @@
               let ctx = canvas.getContext('2d');
               canvas.width = og.naturalWidth;
               canvas.height = og.naturalHeight;
-              canvas.className = "right-click-save-as";
               if (sj.style.objectFit == "fill") { // Phonejak
                 og.style.width = "50%";
                 ctx.drawImage(og,
@@ -137,19 +141,33 @@
                   ctx.drawImage(sj, 0, 0, canvas.width, canvas.height);
                 } else {
                   drawFitImage(ctx, sj, left, top, widthRatio * canvas.width, heightRatio * canvas.height,
-                    {objectFit: 'contain', offsetX: sj.style.objectPosition === 'bottom right' ? 1 : 0, offsetY: 1});
+                    { objectFit: 'contain', offsetX: sj.style.objectPosition === 'bottom right' ? 1 : 0, offsetY: 1 });
                 }
-                nft.prepend(canvas);
+                canvas.toBlob(blob => {
+                  nft.blob = blob;
+                });
+                let dataUrl = canvas.toDataURL();
+                let rightClickImg = new Image();
+                rightClickImg.src = dataUrl;
+                rightClickImg.className = "right-click-save-as";
+                nft.appendChild(rightClickImg);
               });
               sj.src = sjSrc;
             })
+            og.crossOrigin = "Anonymous"
             og.src = a.image_url;
+            nft.addEventListener('click', evt => {
+              if (navigator.share) {
+                let file = new File([nft.blob], a.collection.slug + ".png");
+                navigator.share({ files: [file] });
+              }
+            })
             nft.appendChild(og);
             document.body.appendChild(nft);
             oldHat[a.collection.slug] = true;
           });
         });
-        if (offset < 100) loadem(offset + 50);
+        loadem(offset + 50);
       });
   }
 
