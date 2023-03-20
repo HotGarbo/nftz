@@ -27,6 +27,7 @@
       pointer-events: none;
       touch-action: none;
       -webkit-user-select: none;
+      opacity: 0;
     }
 
     .og {
@@ -37,6 +38,7 @@
       pointer-events: none;
       touch-action: none;
       -webkit-user-select: none;
+      opacity: 0;
     }
 
     .right-click-save-as {
@@ -44,7 +46,6 @@
       left: 0;
       width: 100%;
       height: 100%;
-      opacity: 0;
     }
 
     .nft {
@@ -52,6 +53,14 @@
       width: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333vw;
       max-width: 33.3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333%;
       height: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333vw;
+    }
+
+    #github {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      background-color: white;
+      z-index: 1;
     }
 
     @media (min-width: 768px) {
@@ -71,6 +80,9 @@
     }
   </style>
 </head>
+<body>
+  <div id='github'><a target="_blank" href="https://github.com/HotGarbo/nftz">GitHub</a></div>
+</body>
 <script>
   const soyjaks = [
     { "src": "soyjaks/boredjak.png" },
@@ -143,9 +155,6 @@
                   drawFitImage(ctx, sj, left, top, widthRatio * canvas.width, heightRatio * canvas.height,
                     { objectFit: 'contain', offsetX: sj.style.objectPosition === 'bottom right' ? 1 : 0, offsetY: 1 });
                 }
-                canvas.toBlob(blob => {
-                  nft.blob = blob;
-                });
                 let dataUrl = canvas.toDataURL();
                 let rightClickImg = new Image();
                 rightClickImg.src = dataUrl;
@@ -156,18 +165,12 @@
             })
             og.crossOrigin = "Anonymous"
             og.src = a.image_url;
-            nft.addEventListener('click', evt => {
-              if (navigator.share) {
-                let file = new File([nft.blob], a.collection.slug + ".png");
-                navigator.share({ files: [file] });
-              }
-            })
             nft.appendChild(og);
             document.body.appendChild(nft);
             oldHat[a.collection.slug] = true;
           });
         });
-        loadem(offset + 50);
+        //loadem(offset + 50);
       });
   }
 
