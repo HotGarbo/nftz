@@ -108,7 +108,7 @@
   loadem(0);
 
   function loadem(offset) {
-    fetch('https://api.opensea.io/api/v1/bundles?limit=50&offset=' + offset)
+    fetch('https://testnets-api.opensea.io/api/v1/bundles?limit=50&offset=' + offset)
       .then(r => r.json())
       .then(j => {
         j.bundles.forEach(b => {
