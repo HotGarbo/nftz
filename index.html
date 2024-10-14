@@ -28,7 +28,6 @@
       pointer-events: none;
       touch-action: none;
       -webkit-user-select: none;
-      opacity: 0;
     }
 
     .og {
@@ -39,7 +38,6 @@
       pointer-events: none;
       touch-action: none;
       -webkit-user-select: none;
-      opacity: 0;
     }
 
     .right-click-save-as {
@@ -47,6 +45,7 @@
       left: 0;
       width: 100%;
       height: 100%;
+      opacity: 0;
     }
 
     .nft {
@@ -123,7 +122,9 @@
             let og = new Image();
             og.loading = "lazy";
             og.className = "og";
+            og.style.opacity = 0;
             let sj = soyjakit(soyjaks[i]);
+            sj.style.opacity = 0;
             let sjSrc = soyjaks[i].src;
             i++;
             if (i >= soyjaks.length) {
@@ -147,6 +148,8 @@
               }
               sj.addEventListener('load', evt => {
                 nft.appendChild(sj);
+                og.style.opacity = 100;
+                sj.style.opacity = 100;
                 let left = sj.offsetLeft / nft.offsetWidth * canvas.width;
                 let top = sj.offsetTop / nft.offsetHeight * canvas.height;
                 let widthRatio = sj.offsetWidth / nft.offsetWidth;
@@ -161,7 +164,7 @@
                 let rightClickImg = new Image();
                 rightClickImg.src = dataUrl;
                 rightClickImg.className = "right-click-save-as";
-                nft.appendChild(rightClickImg);
+                nft.prepend(rightClickImg);
               });
               sj.src = sjSrc;
             })
